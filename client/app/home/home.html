@@ -1,0 +1,86 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+  
+</header>
+
+<div class="container">
+    <!-- FORM TO CREATE TODOS -->
+		<div id="todo-form" class="row">
+            <div ng-show="error" class="alert alert-danger">{{error}}</div>
+			<div class="col-sm-8 col-sm-offset-2 text-center">
+				<form name="form" ng-submit="createTodo()" role="form">
+					<div class="form-group">
+
+						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+						<input type="text" class="form-control input-md text-center" placeholder="Title" ng-model="formData.todoTitle" required>
+                        <input type="text" class="form-control input-md text-center" placeholder="Description" ng-model="formData.todoDescription">
+                        <!--<input type="text" class="form-control input-md text-center" placeholder="Event Start DateTime" ng-model="formData.sDate" required>
+                        <input type="text" class="form-control input-md text-center" placeholder="Event End DateTime" ng-model="formData.eDate" required>-->
+                        <quick-datepicker ng-model='formData.sDate' date-format='dd/MM/yyyy'  placeholder='Pick a Start Date' disable-timepicker='true' required></quick-datepicker>
+                        <quick-datepicker ng-model='formData.eDate' date-format='dd/MM/yyyy'  placeholder='Pick a End Date' disable-timepicker='true' required></quick-datepicker>
+					</div>
+
+					<!-- createToDo() WILL CREATE NEW TODOS -->
+					<button type="submit" ng-disabled="form.$invalid || loading" class="btn btn-success">Save</button>
+                    <button type="submit" ng-disabled="form.$invalid || loading" class="btn btn-primary" ng-click="clearTodo()">Clear</button>
+				</form>
+			</div>
+		</div>
+  <div class="row">
+    <div class="col-lg-12">
+        <!-- TODO LIST -->
+		<div id="todo-list" class="row">
+			<table st-persist="myTable" st-table="rowCollection" class="table table-bordered ">
+                <thead >
+                    <td st-sort="sNo">S.No.</td>
+                    <td st-sort="title">Title</td>
+                    <td st-sort="dateStart">Date-Start</td>
+                    <td st-sort="dateEnd">Date-End</td>
+                    <td >Remove</td>
+                    <tr>
+		<th colspan="5">
+			<input st-search placeholder="global search..." class="input-sm form-control" type="search"/>
+		</th>
+	</tr>
+                   </thead>
+                <tbody>
+				<!-- LOOP OVER THE TODOS IN $scope.todos -->
+				<tr ng-repeat="todo in todos">
+                  
+                <td>{{$index + 1}}</td>
+				<td >{{ todo.todoTitle }}</td>
+                <td >{{ todo.sDate |date:'dd/MM/yyyy'}}</td>
+                <td >{{ todo.eDate |date:'dd/MM/yyyy'}}</td> 
+                <td ><button type="button" ng-click="deleteTodo(todo._id)" class="btn btn-sm btn-danger">
+					<i class="glyphicon glyphicon-remove-circle">
+					</i>
+				</button><button type="button" ng-click="editTodo(todo._id)" class="btn btn-sm btn-info">
+					<i class="glyphicon glyphicon-edit">
+					</i>
+				</button></td>
+                   
+                    </tr>
+                </tbody>
+                <tfoot>
+	<tr>
+		<td colspan="5" class="text-center">
+		  <div st-pagination></div>
+		</td>
+	</tr>
+	</tfoot>
+                </table>
+
+				<p class="text-center" ng-show="loading">
+					<span class="fa fa-spinner fa-spin fa-3x"></span>
+				</p>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+      <p>ToDoApp v2.0.13 |
+      </p>
+  </div>
+</footer>
